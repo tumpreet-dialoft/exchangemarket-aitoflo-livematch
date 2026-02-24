@@ -15,12 +15,10 @@
 
 <h2>Update Match Data</h2>
 
-<input id="apiUrl" placeholder="API URL (https://your-domain.com)" />
 <input id="secret" placeholder="Admin Secret" type="password" />
 <input id="teams" placeholder="Match Teams" />
 <input id="time" placeholder="Match Time (07:30 PM)" />
 <input id="venue" placeholder="Venue" />
-
 
 <button onclick="updateMatch()">Update Match</button>
 
@@ -30,8 +28,9 @@
 <div class="box" id="output"></div>
 
 <script>
+const API_URL = "https://somatological-sloan-escutcheoned.ngrok-free.dev"; 
+
 async function updateMatch() {
-  const apiUrl = document.getElementById("apiUrl").value.trim();
   const secret = document.getElementById("secret").value.trim();
 
   const payload = {
@@ -39,11 +38,11 @@ async function updateMatch() {
     match_teams: document.getElementById("teams").value,
     match_time: document.getElementById("time").value,
     match_venue: document.getElementById("venue").value,
-    betting_odds: document.getElementById("odds").value
+    betting_odds: "India win par 1.8 ka rate"
   };
 
   try {
-    const res = await fetch(`${apiUrl}/precall-match`, {
+    const res = await fetch(`${API_URL}/precall-match`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -61,10 +60,8 @@ async function updateMatch() {
 }
 
 async function getMatch() {
-  const apiUrl = document.getElementById("apiUrl").value.trim();
-
   try {
-    const res = await fetch(`${apiUrl}/precall-match`);
+    const res = await fetch(`${API_URL}/precall-match`);
     const data = await res.json();
     document.getElementById("output").innerText =
       "Current Match:\n" + JSON.stringify(data, null, 2);
