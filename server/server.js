@@ -7,6 +7,24 @@ const helmet = require("helmet");
 const compression = require("compression");
 
 const app = express();
+const cors = require("cors");
+
+const allowedOrigins = [
+  "https://exchangemarket-aitoflo-livematch-1.onrender.com"
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true); // allow curl / server-to-server
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 const PORT = process.env.PORT || 3000;
 
 // ====== CONFIG ======
