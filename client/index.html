@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Precall Match Admin</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body { font-family: Arial; max-width: 600px; margin: 40px auto; }
+    input, button { padding: 10px; margin: 8px 0; width: 100%; }
+    button { cursor: pointer; }
+    .box { padding: 15px; border: 1px solid #ddd; margin-top: 20px; }
+  </style>
+</head>
+<body>
+
+<h2>Update Match Data</h2>
+
+<input id="apiUrl" placeholder="API URL (https://your-domain.com)" />
+<input id="secret" placeholder="Admin Secret" type="password" />
+<input id="teams" placeholder="Match Teams" />
+<input id="time" placeholder="Match Time (07:30 PM)" />
+<input id="venue" placeholder="Venue" />
+
+
+<button onclick="updateMatch()">Update Match</button>
+
+<h2>Current Match Data</h2>
+<button onclick="getMatch()">Fetch Match</button>
+
+<div class="box" id="output"></div>
+
+<script>
+async function updateMatch() {
+  const apiUrl = document.getElementById("apiUrl").value.trim();
+  const secret = document.getElementById("secret").value.trim();
+
+  const payload = {
+    has_match: true,
+    match_teams: document.getElementById("teams").value,
+    match_time: document.getElementById("time").value,
+    match_venue: document.getElementById("venue").value,
+    betting_odds: document.getElementById("odds").value
+  };
+
+  try {
+    const res = await fetch(`${apiUrl}/precall-match`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${secret}`
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await res.json();
+    document.getElementById("output").innerText =
+      "Update Response:\n" + JSON.stringify(data, null, 2);
+  } catch (err) {
+    document.getElementById("output").innerText = "Error: " + err.message;
+  }
+}
+
+async function getMatch() {
+  const apiUrl = document.getElementById("apiUrl").value.trim();
+
+  try {
+    const res = await fetch(`${apiUrl}/precall-match`);
+    const data = await res.json();
+    document.getElementById("output").innerText =
+      "Current Match:\n" + JSON.stringify(data, null, 2);
+  } catch (err) {
+    document.getElementById("output").innerText = "Error: " + err.message;
+  }
+}
+</script>
+
+</body>
+</html>
